@@ -92,7 +92,7 @@
         canvas.addEventListener("mouseleave", doMouseLeave, false);
 
         var script = document.createElement('script');
-        script.src = (window.navigator.userAgent.indexOf("Chrome") == -1 && window.navigator.userAgent.indexOf("Safari") != -1) ? "ios.js" : "cff.js";
+        script.src = (window.navigator.userAgent.indexOf("Chrome") == -1 && window.navigator.userAgent.indexOf("Safari") != -1) ? "./src/ios.js" : "./src/cff.js";
         document.head.appendChild(script);
     </script>
 </body>

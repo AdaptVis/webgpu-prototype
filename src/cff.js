@@ -252,7 +252,7 @@ outColor = (1.0 - r) * texture(sampler2D(myTexture2, mySampler), fragUV) + vec4(
   let cubeTexture;
   {
     const img = document.createElement('img');
-    img.src = 'av.png';
+    img.src = './img/av.png';
     await img.decode();
 
     console.log(img);
@@ -289,7 +289,7 @@ outColor = (1.0 - r) * texture(sampler2D(myTexture2, mySampler), fragUV) + vec4(
   let cubeTexture2;
   {
     const img = document.createElement('img');
-    img.src = '8081_earthmap2k.jpg';
+    img.src = './img/8081_earthmap2k.jpg';
     await img.decode();
 
     console.log(img);

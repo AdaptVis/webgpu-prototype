@@ -163,7 +163,7 @@ async function init() {
     const image = new Image();
     const imageLoadPromise = new Promise(resolve => {
         image.onload = () => resolve();
-        image.src = "av.png"
+        image.src = "./img/av.png"
     });
     await Promise.resolve(imageLoadPromise);
 
@@ -229,7 +229,7 @@ async function init() {
         const image = new Image();
         const imageLoadPromise = new Promise(resolve => {
             image.onload = () => resolve();
-            image.src = "8081_earthmap2k.jpg"
+            image.src = "./img/8081_earthmap2k.jpg"
         });
         await Promise.resolve(imageLoadPromise);
 
