@@ -1,4 +1,4 @@
 # webgpu-prototype
 See result at https://www.adaptvis.com/webgpu
 
-Works with WebGPU enabled in Chrome Canaray, Edge Canaray, Firefox Nightly and Safari Technology Preview.
+Works with enabled WebGPU on Chrome Canary, Edge Canary, Firefox Nightly or Safari Technology Preview.
