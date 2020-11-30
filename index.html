@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="gl-matrix.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" crossorigin></script>
+</head>
+
+<body>
+    <canvas id="webgpu-canvas" width="564px" height="564px"></canvas>
+    <script>
+        var xCnt = 64;
+        var yCnt = 32;
+        var indexCnt = (xCnt - 0) * (yCnt - 1) * 2 * 3;
+
+        var camphi = 0.5;
+        var camtheta = 0.0;
+        var camphiDelta = 0;
+        var camthetaDelta = 0;
+        var mx = 0;
+        var my = 0;
+        var canvas;
+
+        var DPR = 1;
+        var isDown = false;
+
+        function getMouseX(event) {
+            return Math.floor(event.pageX - canvas.getBoundingClientRect().left + 0.5) * DPR;
+        }
+
+        function getMouseY(event) {
+            return Math.floor(event.pageY - canvas.getBoundingClientRect().top + 0.5) * DPR;
+        }
+
+        function doMouseMoved(event) {
+
+            var dx = getMouseX(event) - mx;
+            var dy = getMouseY(event) - my;
+
+            if (event.preventDefault)
+                event.preventDefault();
+
+            if (isDown) {
+                if (Math.abs(dx) >= 1 || Math.abs(dy) >= 1) {
+                    camphiDelta = dy * 0.005;
+                    camthetaDelta = dx * 0.005;
+                }
+            }
+            mx = getMouseX(event);
+            my = getMouseY(event);
+        }
+
+        function doMouseDown(event) {
+            isDown = true;
+        }
+
+        function doMouseUp(event) {
+            isDown = false;
+        }
+
+        function doMouseLeave(event) {
+            isDown = false;
+            mx = 0;
+            my = 0;
+        }
+
+        $('webgpu-canvas').mousemove(function (evt) {
+            doMouseMoved(evt);
+        });
+        canvas = document.getElementById("webgpu-canvas");
+
+        canvas.height = $(document).height();
+        canvas.width = $(document).width();
+
+        $(document).on("vmousemove", canvas, function (evt) {
+            doMouseMoved(evt);
+        });
+
+        canvas.addEventListener('touchmove', function (evt) {
+            var event = evt.touches[0];
+            isDown = true;
+            doMouseMoved(event);
+        }, false);
+
+        canvas.addEventListener('mousemove', function (evt) {
+            doMouseMoved(evt);
+        }, false);
+
+        canvas.addEventListener("mousedown", doMouseDown, false);
+        canvas.addEventListener("mouseup", doMouseUp, false);
+        canvas.addEventListener("mouseleave", doMouseLeave, false);
+
+        var script = document.createElement('script');
+        script.src = (window.navigator.userAgent.indexOf("Chrome") == -1 && window.navigator.userAgent.indexOf("Safari") != -1) ? "ios.js" : "cff.js";
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>
