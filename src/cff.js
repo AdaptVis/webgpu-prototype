@@ -358,6 +358,7 @@ outColor = (1.0 - r) * texture(sampler2D(myTexture2, mySampler), fragUV) + vec4(
     let now = Date.now() / 3000;
 
     const canvas = document.getElementById("webgpu-canvas");
+    /*
     let scale = mat4.create();
     if (canvas.width > canvas.height) {
       const aspect = Math.abs(canvas.width / canvas.height);
@@ -366,7 +367,7 @@ outColor = (1.0 - r) * texture(sampler2D(myTexture2, mySampler), fragUV) + vec4(
     else {
       const aspect = Math.abs(canvas.height / canvas.width);
       mat4.fromScaling(scale, vec3.fromValues(0.95, 1.0 / aspect * 0.95, 1));
-    }
+    } */
 
     camphi += camphiDelta;
     camtheta += camthetaDelta;
@@ -382,6 +383,8 @@ outColor = (1.0 - r) * texture(sampler2D(myTexture2, mySampler), fragUV) + vec4(
     camphiDelta *= 0.9;
     camthetaDelta *= 0.9;
 
+    mat4.translate(viewMatrix, viewMatrix, vec3.fromValues(0, 0, -3));
+
     mat4.rotateX(viewMatrix, viewMatrix, camphi);
     mat4.rotateY(viewMatrix, viewMatrix, camtheta);
 
@@ -389,11 +392,16 @@ outColor = (1.0 - r) * texture(sampler2D(myTexture2, mySampler), fragUV) + vec4(
 
     let projectionMatrix = mat4.create();
 
+    const aspect = Math.abs(canvas.width / canvas.height);
+    mat4.perspective(projectionMatrix, Math.PI / 4.5, aspect, 1, 100);
+
     let modelViewProjectionMatrix = mat4.create();
-    mat4.multiply(modelViewProjectionMatrix, scale, viewMatrix);
+    mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
 
     return modelViewProjectionMatrix;
   }
+
+  document.body.removeChild(document.getElementById("loading"));
 
   requestAnimationFrame(function draw() {
     const transformationMatrix = getTransformationMatrix();

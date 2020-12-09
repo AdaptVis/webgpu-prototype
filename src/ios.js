@@ -417,6 +417,7 @@ async function init() {
         depthStencilAttachment: depthAttachment
     };
 
+    document.body.removeChild(document.getElementById("loading"));
     render();
 }
 
@@ -488,6 +489,8 @@ function updateTransformArray(array) {
     let now = Date.now() / 3000;
 
     const canvas = document.getElementById("webgpu-canvas");
+
+    /*
     var scale = mat4.create();
     if (canvas.width > canvas.height) {
         const aspect = Math.abs(canvas.width / canvas.height);
@@ -496,7 +499,7 @@ function updateTransformArray(array) {
     else {
         const aspect = Math.abs(canvas.height / canvas.width);
         mat4.fromScaling(scale, vec3.fromValues(0.95, 1.0 / aspect * 0.95, 1));
-    }
+    }*/
 
     camphi += camphiDelta;
     camtheta += camthetaDelta;
@@ -512,13 +515,19 @@ function updateTransformArray(array) {
     camphiDelta *= 0.9;
     camthetaDelta *= 0.9;
 
+    mat4.translate(viewMatrix, viewMatrix, vec3.fromValues(0, 0, -3));
+
     mat4.rotateX(viewMatrix, viewMatrix, camphi);
     mat4.rotateY(viewMatrix, viewMatrix, camtheta);
 
     mat4.rotate(viewMatrix, viewMatrix, now, vec3.fromValues(0, 1, 0));
 
     let modelViewProjectionMatrix = mat4.create();
-    mat4.multiply(modelViewProjectionMatrix, scale, viewMatrix);
+
+    const aspect = Math.abs(canvas.width / canvas.height);
+    mat4.perspective(projectionMatrix, Math.PI / 4.5, aspect, 1, 100);
+
+    mat4.multiply(modelViewProjectionMatrix, projectionMatrix, viewMatrix);
     mat4.copy(array, modelViewProjectionMatrix)
 }
 

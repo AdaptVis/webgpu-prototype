@@ -5,9 +5,21 @@
     <meta charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" crossorigin></script>
+
+    <style type="text/css">
+        body{
+        margin: 0;
+        padding: 0
+        }
+        canvas{
+        margin: 0;
+        padding: 0
+        }
+        </style>
 </head>
 
 <body>
+    <div id="loading" style=" font-size: xx-large; text-align:center; padding: 20px;">Loading WebGPU Prototype ...</div>
     <canvas id="webgpu-canvas" width="564px" height="564px"></canvas>
     <script>
         var xCnt = 64;
@@ -70,8 +82,8 @@
         });
         canvas = document.getElementById("webgpu-canvas");
 
-        canvas.height = $(document).height();
-        canvas.width = $(document).width();
+        canvas.height = $(document).innerHeight();
+        canvas.width = $(document).innerWidth();
 
         $(document).on("vmousemove", canvas, function (evt) {
             doMouseMoved(evt);
@@ -91,9 +103,23 @@
         canvas.addEventListener("mouseup", doMouseUp, false);
         canvas.addEventListener("mouseleave", doMouseLeave, false);
 
-        var script = document.createElement('script');
-        script.src = (window.navigator.userAgent.indexOf("Chrome") == -1 && window.navigator.userAgent.indexOf("Safari") != -1) ? "./src/ios.js" : "./src/cff.js";
-        document.head.appendChild(script);
+        (async () =>
+        {
+            try
+            {
+                const adapter = await navigator.gpu.requestAdapter();
+
+                {
+                    var script = document.createElement('script');
+                    script.src = (window.navigator.userAgent.indexOf("Chrome") == -1 && window.navigator.userAgent.indexOf("Safari") != -1) ? "./src/ios.js" : "./src/cff.js";
+                    document.head.appendChild(script);
+                }
+            } catch(e)
+            {
+                document.getElementById("loading").innerHTML = "WebGPU not enabled! <br><br> <a href='https://github.com/AdaptVis/webgpu-prototype'>Click here for more details</a>";
+            }
+        })();
+
     </script>
 </body>
 </html>
